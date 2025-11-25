@@ -1,5 +1,4 @@
 module org.example.fuzzy_app {
-    requires javafx.controls;
     requires javafx.fxml;
     requires javafx.web;
     requires javafx.graphics;   // <-- OBLIGATOIRE
