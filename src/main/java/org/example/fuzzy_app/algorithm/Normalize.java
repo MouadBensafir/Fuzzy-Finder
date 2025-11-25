@@ -1,7 +1,6 @@
-package org.example.fuzzy_app;
+package org.example.fuzzy_app.algorithm;
 
 import java.text.Normalizer;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 

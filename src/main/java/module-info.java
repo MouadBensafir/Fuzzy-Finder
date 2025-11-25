@@ -11,4 +11,6 @@ module org.example.fuzzy_app {
 
     opens org.example.fuzzy_app to javafx.fxml;
     exports org.example.fuzzy_app;
+    exports org.example.fuzzy_app.algorithm;
+    opens org.example.fuzzy_app.algorithm to javafx.fxml;
 }
