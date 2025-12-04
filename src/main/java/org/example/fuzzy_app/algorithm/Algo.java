@@ -4,7 +4,7 @@ import java.util.List;
 
 public class Algo implements ScoringStrategy {
     public int score(String query, String filename, Slab slab) {
-        return Algorithm.fuzzyMatchV2(true, true, true, filename, query, true, slab).score;
+        return Algorithm.fuzzyMatchV2(false, true, true, filename, query, true, slab).score;
     }
 
     public static void main(String[] args) {

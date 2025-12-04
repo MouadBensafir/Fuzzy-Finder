@@ -54,6 +54,6 @@ public class BitInclusion {
     }
 
     public static void main(String[] args) {
-        System.out.println(match("aaa", "aab"));
+        System.out.println(match("Aaa", "aab"));
     }
 }
