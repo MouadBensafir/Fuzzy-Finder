@@ -1,16 +1,101 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.geometry.Insets?>
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.*?>
 
-<?import javafx.scene.control.Button?>
-<VBox alignment="CENTER" spacing="20.0" xmlns:fx="http://javafx.com/fxml"
-      fx:controller="org.example.fuzzy_app.HelloController">
-    <padding>
-        <Insets bottom="20.0" left="20.0" right="20.0" top="20.0"/>
-    </padding>
+<BorderPane xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml"
+            fx:controller="org.example.fuzzy_app.MainController"
+            stylesheets="@style.css">
+    
+    <top>
+        <VBox spacing="10" styleClass="top-section">
+            <padding>
+                <Insets top="15" right="15" bottom="15" left="15"/>
+            </padding>
+            
+            <!-- Search Section -->
+            <HBox spacing="10" alignment="CENTER_LEFT">
+                <Label text="Search:" styleClass="section-label"/>
+                <TextField fx:id="searchField" promptText="Type to search files and folders..." 
+                           HBox.hgrow="ALWAYS" styleClass="search-field"/>
+            </HBox>
+            
+            <!-- Root Directory Section -->
+            <VBox spacing="5">
+                <HBox spacing="10" alignment="CENTER_LEFT">
+                    <Label text="Root Directories:" styleClass="section-label"/>
+                    <Button fx:id="addRootButton" text="Add Root" onAction="#handleAddRoot" 
+                            styleClass="add-root-button"/>
+                    <Button fx:id="removeRootButton" text="Remove Selected" onAction="#handleRemoveRoot" 
+                            styleClass="remove-root-button"/>
+                </HBox>
+                <ListView fx:id="rootsList" prefHeight="100" styleClass="roots-list"/>
+            </VBox>
+            
+            <!-- Some useful info -->
+            <HBox spacing="20">
+                <Label fx:id="statusLabel" text="Ready" styleClass="status-label"/>
+                <Label fx:id="statsLabel" text="Files: 0 | Directories: 0 | Roots: 0" 
+                       styleClass="stats-label"/>
+            </HBox>
+        </VBox>
+    </top>
+    
 
-    <Label fx:id="welcomeText"/>
-    <Button text="Hello!" onAction="#onHelloButtonClick"/>
-</VBox>
+    <center>
+        <SplitPane dividerPositions="0.5" orientation="HORIZONTAL">
+            <!-- Left: Results List -->
+            <VBox spacing="5">
+                <padding>
+                    <Insets top="10" right="10" bottom="10" left="10"/>
+                </padding>
+                
+                <Label text="Results:" styleClass="section-label"/>
+                <ListView fx:id="resultsList" VBox.vgrow="ALWAYS" styleClass="results-list"/>
+                
+                <!-- Action Buttons (File-specific) -->
+                <HBox spacing="10" fx:id="fileActionButtons">
+                    <Button fx:id="openFileButton" text="Open File" onAction="#handleOpenFile"
+                            HBox.hgrow="ALWAYS" styleClass="open-file-button"/>
+                    <Button fx:id="openWithEditorButton" text="Open with Editor" onAction="#handleOpenWithEditor"
+                            HBox.hgrow="ALWAYS" styleClass="open-editor-button"/>
+                </HBox>
+                
+                <!-- Action Buttons (Folder-specific) -->
+                <HBox spacing="10" fx:id="folderActionButtons" visible="false" managed="false">
+                    <Button fx:id="openFolderButton" text="Open Folder" onAction="#handleOpenFolder"
+                            HBox.hgrow="ALWAYS" styleClass="open-folder-button"/>
+                </HBox>
+                
+                <!-- Editor Command -->
+                <HBox spacing="5" alignment="CENTER_LEFT" fx:id="editorCommandBox">
+                    <Label text="Editor:" styleClass="editor-label"/>
+                    <TextField fx:id="editorCommandField" promptText="code (VSCode)" 
+                               HBox.hgrow="ALWAYS" styleClass="editor-field"/>
+                </HBox>
+            </VBox>
+            
+            <!-- Right: File Content Viewer -->
+            <VBox spacing="5">
+                <padding>
+                    <Insets top="10" right="10" bottom="10" left="10"/>
+                </padding>
+                
+                <Label text="File Content:" styleClass="section-label"/>
+                <StackPane VBox.vgrow="ALWAYS">
+                    <TextArea fx:id="fileContentArea" editable="false" wrapText="true" 
+                              styleClass="file-content-area"/>
+                    <ScrollPane fx:id="imageScrollPane" fitToWidth="true" fitToHeight="true" 
+                                visible="false" managed="false">
+                        <ImageView fx:id="imageView" preserveRatio="true" 
+                                   smooth="true" cache="true"/>
+                    </ScrollPane>
+                </StackPane>
+            </VBox>
+        </SplitPane>
+    </center>
+    
+</BorderPane>
+
