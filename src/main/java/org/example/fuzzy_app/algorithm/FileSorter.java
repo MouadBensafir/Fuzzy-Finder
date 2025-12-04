@@ -7,7 +7,7 @@ import java.util.stream.Collectors;
 
 public class FileSorter {
     private static final ThreadLocal<Slab> threadLocalSlab = ThreadLocal.withInitial(Slab::new);
-    public static List<String> sortAllFiles(String[] files, String query) {
+    public static List<String> sortAllFiles(String[] files, String query, boolean caseSensitive) {
 
         if (query == null || query.isEmpty()) {
             return Arrays.asList(Arrays.copyOf(files, Math.min(files.length, 100)));
@@ -19,7 +19,7 @@ public class FileSorter {
                 .map(file -> {
                     Slab slab = threadLocalSlab.get();
                     Result res = Algorithm.fuzzyMatchV2(
-                            false, true, true, file, query, false, slab
+                            caseSensitive, true, file, query, false, slab
                     );
                     return new ScoredFile(file, res);
                 })

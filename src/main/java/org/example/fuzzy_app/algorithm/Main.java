@@ -37,7 +37,7 @@ public class Main {
 
         // Run the algorithm
         // params: caseSensitive=false, normalize=true, forward=true, text, pattern, withPos=true, slab
-        Result res = algo.fuzzyMatchV2(false, true, true, text, pattern, true, slab);
+        Result res = algo.fuzzyMatchV2(false, true, text, pattern, true, slab);
 
         System.out.print("Pattern: [" + pattern + "] in [" + text + "] ");
 

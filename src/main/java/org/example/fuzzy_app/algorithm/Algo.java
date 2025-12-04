@@ -1,11 +1,9 @@
 package org.example.fuzzy_app.algorithm;
-
-import java.nio.charset.StandardCharsets;
 import java.util.List;
 
 public class Algo implements ScoringStrategy {
     public int score(String query, String filename, Slab slab) {
-        return Algorithm.fuzzyMatchV2(true, true, true, filename, query, true, slab).score;
+        return Algorithm.fuzzyMatchV2(true, true, filename, query, true, slab).score;
     }
 
     public static void main(String[] args) {
@@ -20,14 +18,12 @@ public class Algo implements ScoringStrategy {
                 "target/classes/Main.class"
         };
 
-        String query = "m"; // looking for Main.java
-
-        List<String> results = FileSorter.sortAllFiles(myFiles, query);
-
+        String query = "M";
+        List<String> results = FileSorter.sortAllFiles(myFiles, query, true);
         results.forEach(System.out::println);
     }
 
-    public static List<String> SortAllFiles(String[] files, String query) {
-        return FileSorter.sortAllFiles(files, query);
+    public static List<String> SortAllFiles(String[] files, String query, boolean caseSensitive) {
+        return FileSorter.sortAllFiles(files, query, caseSensitive);
     }
 }
