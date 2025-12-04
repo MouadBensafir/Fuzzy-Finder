@@ -2,17 +2,17 @@ package org.example.fuzzy_app.algorithm;
 
 public class BitInclusion {
 
-    private static int formula(int src, int dest) {
-        return dest | ((~dest)&(~src));
+    private static int formula(int query, int path) {
+        return path | ((~path)&(~query));
     }
 
-    public static boolean match(String src, String dest) {
-        src = src.toLowerCase();
-        dest = dest.toLowerCase();
+    public static boolean match(String query, String path) {
+        query = query.toLowerCase();
+        path = path.toLowerCase();
         int firstfilter1 = 0;
         int secondfilter1 = 0;
         int thirdfilter1 = 0;
-        for (Character cha: src.toCharArray()) {
+        for (Character cha: query.toCharArray()) {
             if (cha < 32 || cha > 126) {
                 continue;
             }
@@ -32,7 +32,7 @@ public class BitInclusion {
         int firstfilter2 = 0;
         int secondfilter2 = 0;
         int thirdfilter2 = 0;
-        for (Character cha: dest.toCharArray()) {
+        for (Character cha: path.toCharArray()) {
             if (cha < 32 || cha > 126) {
                 continue;
             }
@@ -54,6 +54,6 @@ public class BitInclusion {
     }
 
     public static void main(String[] args) {
-        System.out.println(match("palindrome", "emordnilaps"));
+        System.out.println(match("aaa", "aab"));
     }
 }
