@@ -1,9 +1,9 @@
 module org.example.fuzzy_app {
     requires javafx.fxml;
     requires javafx.web;
-    requires javafx.graphics;   // <-- OBLIGATOIRE
-    requires javafx.media;      // <-- pour FXGL
-    requires javafx.swing;      // <-- si FXGL ou TilesFX utilisent Swing
+    requires javafx.graphics;   
+    requires javafx.media;      
+    requires javafx.swing;     
 
     requires org.controlsfx.controls;
     requires org.kordamp.bootstrapfx.core;

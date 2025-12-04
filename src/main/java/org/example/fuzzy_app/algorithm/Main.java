@@ -1,6 +1,5 @@
 package org.example.fuzzy_app.algorithm;
 
-import java.nio.charset.StandardCharsets;
 
 public class Main {
 
@@ -37,7 +36,7 @@ public class Main {
 
         // Run the algorithm
         // params: caseSensitive=false, normalize=true, forward=true, text, pattern, withPos=true, slab
-        Result res = algo.fuzzyMatchV2(false, true, true, text, pattern, true, slab);
+        Result res = Algorithm.fuzzyMatchV2(false, true, true, text, pattern, true, slab);
 
         System.out.print("Pattern: [" + pattern + "] in [" + text + "] ");
 

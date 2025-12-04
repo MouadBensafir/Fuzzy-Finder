@@ -1,6 +1,5 @@
 package org.example.fuzzy_app.algorithm;
 
-import java.nio.charset.StandardCharsets;
 import java.util.List;
 
 public class Algo implements ScoringStrategy {

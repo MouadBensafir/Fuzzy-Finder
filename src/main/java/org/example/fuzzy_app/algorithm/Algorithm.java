@@ -74,14 +74,14 @@ public class Algorithm {
         int N = slices[1] - slices[0];
         int M = pattern.length();
         int offset16 = 0;
-        int offset32 = 0;
+        // int offset32 = 0;
         int H0 = 0;
         int C0 = N;
         int B = 2*N;
         offset16 = 3*N;
         int F = 0;
         int T = M;
-        offset32 = N + M;
+        // offset32 = N + M;
         int prevClass = Constants.CHAR_NON_WORD;
         int thisClass = Constants.CHAR_WHITE;
         short bonus;
