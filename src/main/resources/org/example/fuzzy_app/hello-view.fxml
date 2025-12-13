@@ -3,6 +3,7 @@
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.image.ImageView?>
+<?import org.fxmisc.richtext.CodeArea?>
 <?import javafx.scene.layout.*?>
 
 <HBox xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml"
@@ -20,8 +21,8 @@
             <Insets top="10" right="10" bottom="10" left="10"/>
         </padding>
         <Label text="Theme" styleClass="section-label"/>
-        <RadioButton fx:id="lightModeRadio" text="Light" toggleGroup="$themeToggleGroup" onAction="#handleThemeToggle" selected="true"/>
-        <RadioButton fx:id="darkModeRadio" text="Dark" toggleGroup="$themeToggleGroup" onAction="#handleThemeToggle"/>
+        <RadioButton fx:id="lightModeRadio" text="Light" toggleGroup="$themeToggleGroup" onAction="#handleThemeToggle"/>
+        <RadioButton fx:id="darkModeRadio" text="Dark" toggleGroup="$themeToggleGroup" onAction="#handleThemeToggle" selected="true"/>
         <RadioButton fx:id="nightModeRadio" text="Night" toggleGroup="$themeToggleGroup" onAction="#handleThemeToggle"/>
     </VBox>
 
@@ -103,7 +104,8 @@
                     <Label text="File Content:" styleClass="section-label"/>
                     <StackPane VBox.vgrow="ALWAYS">
                         <TextArea fx:id="fileContentArea" editable="false" wrapText="true" 
-                                  styleClass="file-content-area"/>
+                                      styleClass="file-content-area"/>
+                        <CodeArea fx:id="codeArea" visible="false" managed="false" />
                         <ScrollPane fx:id="imageScrollPane" fitToWidth="true" fitToHeight="true" 
                                     visible="false" managed="false">
                             <ImageView fx:id="imageView" preserveRatio="true" 

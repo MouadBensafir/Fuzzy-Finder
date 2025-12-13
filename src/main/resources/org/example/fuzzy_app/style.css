@@ -315,4 +315,57 @@
     -fx-text-fill: white;
 }
 
+/* Dark/Night search field overrides to ensure visibility */
+.dark .search-field,
+.dark .text-field.search-field,
+.dark .search-field .text-field {
+    -fx-background-color: #2b2b2b;
+    -fx-control-inner-background: #2b2b2b;
+    -fx-text-fill: #eaeaea;
+    -fx-prompt-text-fill: #9e9e9e;
+    -fx-border-color: #444;
+}
+.dark .search-field:focused,
+.dark .text-field.search-field:focused,
+.dark .search-field .text-field:focused {
+    -fx-border-color: #2196F3;
+    -fx-border-width: 2px;
+}
+
+.night .search-field,
+.night .text-field.search-field,
+.night .search-field .text-field {
+    -fx-background-color: #0f1113;
+    -fx-control-inner-background: #0f1113;
+    -fx-text-fill: #dcdcdc;
+    -fx-prompt-text-fill: #8a8a8a;
+    -fx-border-color: #222;
+}
+.night .search-field:focused,
+.night .text-field.search-field:focused,
+.night .search-field .text-field:focused {
+    -fx-border-color: #1f6fbf;
+    -fx-border-width: 2px;
+}
+
+/* RichTextFX token styles */
+.keyword { -fx-fill: #c792ea; -fx-font-weight: bold; }
+.comment { -fx-fill: #546e7a; }
+.string { -fx-fill: #2e7d32; } /* default string color (darker green for light mode) */
+.number { -fx-fill: #f78c6c; }
+
+.code-area { -fx-background-color: transparent; -fx-font-family: Consolas, monospace; -fx-font-size: 12px; -fx-fill: #111111; }
+
+
+.light .code-area { -fx-fill: #111111; }
+.light .code-area .string { -fx-fill: #2e7d32; } /* darker green in light mode */
+
+/* Token overrides to ensure keywords/comments/strings keep intended colors in dark mode */
+.dark .code-area .keyword { -fx-fill: #c792ea; -fx-font-weight: bold; }
+.dark .code-area .comment { -fx-fill: #7a8b91; }
+.dark .code-area .string { -fx-fill: #a8d5a2; }
+
+.light .code-area .keyword { -fx-fill: #c792ea; -fx-font-weight: bold; }
+.light .code-area .comment { -fx-fill: #546e7a; }
+
 

@@ -9,6 +9,13 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.ToggleGroup;
+import org.fxmisc.richtext.CodeArea;
+import org.fxmisc.richtext.model.StyleSpans;
+import org.fxmisc.richtext.model.StyleSpansBuilder;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import javafx.event.ActionEvent;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.Window;
@@ -52,6 +59,9 @@ public class MainController implements Initializable {
     private TextArea fileContentArea;
 
     @FXML
+    private CodeArea codeArea;
+
+    @FXML
     private ImageView imageView;
 
     @FXML
@@ -93,7 +103,25 @@ public class MainController implements Initializable {
     private CompletableFuture<?> currentSearchTask = null;
     private PauseTransition searchDebounce;
     private IndexService indexService;
-    private boolean imageSizeListenersSetup = false;
+        private boolean imageSizeListenersSetup = false;
+
+        private static final String JAVA_KEYWORDS = "abstract|assert|boolean|break|byte|case|catch|char|class|const|continue|default|do|double|else|enum|extends|final|finally|float|for|if|implements|import|instanceof|int|interface|long|native|new|package|private|protected|public|return|short|static|strictfp|super|switch|synchronized|this|throw|throws|transient|try|void|volatile|while";
+
+        private static final String PY_KEYWORDS = "False|None|True|and|as|assert|async|await|break|class|continue|def|del|elif|else|except|finally|for|from|global|if|import|in|is|lambda|nonlocal|not|or|pass|raise|return|try|while|with|yield";
+
+        private static final Pattern JAVA_PATTERN = Pattern.compile(
+            "(?<KEYWORD>\\b(" + JAVA_KEYWORDS + ")\\b)"
+            + "|(?<COMMENT>//[^\\n]*|/\\*(.|\\R)*?\\*/)"
+            + "|(?<STRING>\"([^\\\"]|\\\\.)*\"|'([^'\\\\]|\\\\.)*')"
+            + "|(?<NUMBER>\\b\\d+(?:\\.\\d+)?\\b)"
+        );
+
+        private static final Pattern PY_PATTERN = Pattern.compile(
+            "(?<KEYWORD>\\b(" + PY_KEYWORDS + ")\\b)"
+            + "|(?<COMMENT>#.*)"
+            + "|(?<STRING>\"([^\\\"]|\\\\.)*\"|'([^'\\\\]|\\\\.)*')"
+            + "|(?<NUMBER>\\b\\d+(?:\\.\\d+)?\\b)"
+        );
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -104,11 +132,32 @@ public class MainController implements Initializable {
         setupImageSizeListeners();
         updateStatsAsync();
 
-        // Default theme: light
+        // Default theme: Dark
         if (rootPane != null) {
             rootPane.getStyleClass().removeAll("dark", "light", "night");
-            rootPane.getStyleClass().add("light");
+            rootPane.getStyleClass().add("dark");
         }
+
+        if (codeArea != null) {
+            codeArea.setVisible(false);
+            codeArea.setManaged(false);
+            codeArea.getStylesheets().add(getClass().getResource("/org/example/fuzzy_app/style.css").toExternalForm());
+        }
+        
+            // Add C:\Users as default root on initialization (Windows)
+            try {
+                Path defaultRoot = Paths.get("C:", "Users");
+                if (Files.exists(defaultRoot) && Files.isDirectory(defaultRoot)) {
+                    String rootPathStr = defaultRoot.toString();
+                    if (rootsList != null && !rootsList.getItems().contains(rootPathStr)) {
+                        rootsList.getItems().add(rootPathStr);
+                        indexDirectory(defaultRoot);
+                        if (statusLabel != null) statusLabel.setText("Indexing default root: " + rootPathStr);
+                    }
+                }
+            } catch (Exception e) {
+                if (statusLabel != null) statusLabel.setText("Error adding default root: " + e.getMessage());
+            }
     }
 
     @FXML
@@ -394,21 +443,48 @@ public class MainController implements Initializable {
     
     private void loadTextContent(Path path) {
         hideImageView();
-        FileContentService.readFileContentAsync(
-            path,
-            content -> Platform.runLater(() -> {
-                fileContentArea.setText(content);
-                statusLabel.setText("Loaded content: " + path.getFileName());
-            }),
-            error -> Platform.runLater(() -> {
-                fileContentArea.setText("");
-                statusLabel.setText(error);
-            }),
-            binaryMessage -> Platform.runLater(() -> {
-                fileContentArea.setText(binaryMessage);
-                statusLabel.setText("Cannot view binary file or PDF: " + path.getFileName());
-            })
-        );
+        String fileName = path.getFileName() != null ? path.getFileName().toString().toLowerCase() : "";
+        boolean isJava = fileName.endsWith(".java");
+        boolean isPy = fileName.endsWith(".py");
+
+        if (isJava || isPy) {
+            String lang = isJava ? "java" : "python";
+            FileContentService.readFileContentAsync(
+                path,
+                content -> Platform.runLater(() -> {
+                    loadCodeInCodeArea(content, lang);
+                    statusLabel.setText("Loaded content: " + path.getFileName());
+                }),
+                error -> Platform.runLater(() -> {
+                    hideCodeArea();
+                    fileContentArea.setText("");
+                    statusLabel.setText(error);
+                }),
+                binaryMessage -> Platform.runLater(() -> {
+                    hideCodeArea();
+                    fileContentArea.setText(binaryMessage);
+                    statusLabel.setText("Cannot view binary file or PDF: " + path.getFileName());
+                })
+            );
+        } else {
+            // Plain text for other file types
+            hideCodeArea();
+            FileContentService.readFileContentAsync(
+                path,
+                content -> Platform.runLater(() -> {
+                    fileContentArea.setText(content);
+                    statusLabel.setText("Loaded content: " + path.getFileName());
+                }),
+                error -> Platform.runLater(() -> {
+                    fileContentArea.setText("");
+                    statusLabel.setText(error);
+                }),
+                binaryMessage -> Platform.runLater(() -> {
+                    fileContentArea.setText(binaryMessage);
+                    statusLabel.setText("Cannot view binary file or PDF: " + path.getFileName());
+                })
+            );
+        }
     }
     
     private void loadImage(Path path) {
@@ -467,6 +543,7 @@ public class MainController implements Initializable {
     }
     
     private void showImageView() {
+        hideCodeArea();
         fileContentArea.setVisible(false);
         fileContentArea.setManaged(false);
         imageScrollPane.setVisible(true);
@@ -476,8 +553,68 @@ public class MainController implements Initializable {
     private void hideImageView() {
         imageScrollPane.setVisible(false);
         imageScrollPane.setManaged(false);
+        // default to showing the text area unless code area is active
+        if (codeArea != null && codeArea.isVisible()) {
+            // keep code area visible
+        } else {
+            fileContentArea.setVisible(true);
+            fileContentArea.setManaged(true);
+        }
+    }
+
+    private void showCodeArea() {
+        if (codeArea == null) return;
+        imageScrollPane.setVisible(false);
+        imageScrollPane.setManaged(false);
+        fileContentArea.setVisible(false);
+        fileContentArea.setManaged(false);
+        codeArea.setVisible(true);
+        codeArea.setManaged(true);
+    }
+
+    private void hideCodeArea() {
+        if (codeArea == null) return;
+        codeArea.setVisible(false);
+        codeArea.setManaged(false);
+        // show text area by default
         fileContentArea.setVisible(true);
         fileContentArea.setManaged(true);
+    }
+
+    private void loadCodeInCodeArea(String content, String lang) {
+        if (codeArea == null) return;
+        // Insert text first (CodeArea normalizes line endings), then compute highlighting
+        codeArea.replaceText(content);
+        String normalized = codeArea.getText();
+        StyleSpans<Collection<String>> spans = computeHighlighting(normalized, lang);
+        codeArea.setStyleSpans(0, spans);
+        showCodeArea();
+    }
+
+    private StyleSpans<Collection<String>> computeHighlighting(String text, String lang) {
+        Pattern pattern = "python".equalsIgnoreCase(lang) ? PY_PATTERN : JAVA_PATTERN;
+        Matcher matcher = pattern.matcher(text);
+        StyleSpansBuilder<Collection<String>> spansBuilder = new StyleSpansBuilder<>();
+        int last = 0;
+        while (matcher.find()) {
+            int start = matcher.start();
+            if (start > last) {
+                spansBuilder.add(Collections.emptyList(), start - last);
+            }
+
+            String style = matcher.group("KEYWORD") != null ? "keyword"
+                         : matcher.group("COMMENT") != null ? "comment"
+                         : matcher.group("STRING") != null ? "string"
+                         : matcher.group("NUMBER") != null ? "number"
+                         : "";
+
+            spansBuilder.add(style.isEmpty() ? Collections.emptyList() : Collections.singleton(style), matcher.end() - start);
+            last = matcher.end();
+        }
+        if (last < text.length()) {
+            spansBuilder.add(Collections.emptyList(), text.length() - last);
+        }
+        return spansBuilder.create();
     }
 
     @FXML

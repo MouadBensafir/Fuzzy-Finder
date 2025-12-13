@@ -8,6 +8,8 @@ module org.example.fuzzy_app {
     requires org.controlsfx.controls;
     requires org.kordamp.bootstrapfx.core;
     requires com.almasb.fxgl.all;
+    requires org.fxmisc.richtext;
+    requires org.fxmisc.flowless;
 
     opens org.example.fuzzy_app to javafx.fxml;
     exports org.example.fuzzy_app;
