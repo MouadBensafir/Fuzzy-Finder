@@ -250,6 +250,12 @@
     -fx-min-width: 140px;
 }
 
+/* Footer title in sidebar */
+.app-footer-title { -fx-font-weight: bold; }
+.sidebar .app-footer-title { -fx-text-fill: #222222; }
+.dark .sidebar .app-footer-title { -fx-text-fill: #ffffff; }
+.night .sidebar .app-footer-title { -fx-text-fill: #ffffff; }
+
 /* Theme: Light (default) */
 .light .top-section {
     -fx-background-color: #f5f5f5;
@@ -382,6 +388,39 @@
 .night .search-field:focused,
 .night .text-field.search-field:focused,
 .night .search-field .text-field:focused {
+    -fx-border-color: #1f6fbf;
+    -fx-border-width: 2px;
+}
+
+/* Ensure editor command field stays white in dark/night modes */
+.dark .editor-field,
+.dark .text-field.editor-field,
+.dark .editor-field .text-field {
+    -fx-background-color: white;
+    -fx-control-inner-background: white;
+    -fx-text-fill: #111111;
+    -fx-prompt-text-fill: #777777;
+    -fx-border-color: #ccc;
+}
+.dark .editor-field:focused,
+.dark .text-field.editor-field:focused,
+.dark .editor-field .text-field:focused {
+    -fx-border-color: #2196F3;
+    -fx-border-width: 2px;
+}
+
+.night .editor-field,
+.night .text-field.editor-field,
+.night .editor-field .text-field {
+    -fx-background-color: white;
+    -fx-control-inner-background: white;
+    -fx-text-fill: #111111;
+    -fx-prompt-text-fill: #777777;
+    -fx-border-color: #ccc;
+}
+.night .editor-field:focused,
+.night .text-field.editor-field:focused,
+.night .editor-field .text-field:focused {
     -fx-border-color: #1f6fbf;
     -fx-border-width: 2px;
 }
