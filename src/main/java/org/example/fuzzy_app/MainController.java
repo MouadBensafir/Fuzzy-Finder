@@ -7,6 +7,8 @@ import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
+import javafx.scene.control.RadioButton;
+import javafx.scene.control.ToggleGroup;
 import javafx.event.ActionEvent;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.Window;
@@ -73,6 +75,21 @@ public class MainController implements Initializable {
     @FXML
     private HBox folderActionButtons;
 
+    @FXML
+    private HBox rootPane;
+
+    @FXML
+    private RadioButton lightModeRadio;
+
+    @FXML
+    private RadioButton darkModeRadio;
+
+    @FXML
+    private RadioButton nightModeRadio;
+
+    @FXML
+    private ToggleGroup themeToggleGroup;
+
     private CompletableFuture<?> currentSearchTask = null;
     private PauseTransition searchDebounce;
     private IndexService indexService;
@@ -82,9 +99,56 @@ public class MainController implements Initializable {
     public void initialize(URL location, ResourceBundle resources) {
         indexService = new IndexService();
         setupSearchListener();
+        setupResultsCellFactory();
         setupResultsSelectionListener();
         setupImageSizeListeners();
         updateStatsAsync();
+
+        // Default theme: light
+        if (rootPane != null) {
+            rootPane.getStyleClass().removeAll("dark", "light", "night");
+            rootPane.getStyleClass().add("light");
+        }
+    }
+
+    @FXML
+    protected void handleThemeToggle(ActionEvent event) {
+        if (rootPane == null) return;
+
+        // Clear any existing theme classes
+        rootPane.getStyleClass().removeAll("dark", "light", "night");
+
+        if (darkModeRadio != null && darkModeRadio.isSelected()) {
+            rootPane.getStyleClass().add("dark");
+        } else if (nightModeRadio != null && nightModeRadio.isSelected()) {
+            rootPane.getStyleClass().add("night");
+        } else {
+            rootPane.getStyleClass().add("light");
+        }
+    }
+
+    private void setupResultsCellFactory() {
+        resultsList.setCellFactory(lv -> new ListCell<String>() {
+            @Override
+            protected void updateItem(String item, boolean empty) {
+                super.updateItem(item, empty);
+                if (empty || item == null) {
+                    setText(null);
+                    setGraphic(null);
+                } else {
+                    Path path = Paths.get(item);
+                    String name = path.getFileName() != null ? path.getFileName().toString() : item;
+                    boolean isDirectory = Files.isDirectory(path);
+
+                    Label icon = new Label(isDirectory ? "📁" : "📄");
+                    Label nameLabel = new Label(name);
+
+                    HBox box = new HBox(8, icon, nameLabel);
+                    setText(null);
+                    setGraphic(box);
+                }
+            }
+        });
     }
     
     private void setupImageSizeListeners() {
@@ -140,10 +204,11 @@ public class MainController implements Initializable {
         searchField.textProperty().addListener((observable, oldValue, newValue) -> {
             // Cancel previous debounce
             searchDebounce.stop();
-            
-            // If query is empty, show results immediately
+
+            // If query is empty, clear results (don't show indexed paths)
             if (newValue == null || newValue.trim().isEmpty()) {
-                performSearch("");
+                if (resultsList != null) resultsList.getItems().clear();
+                if (statusLabel != null) statusLabel.setText("");
             } else {
                 // Otherwise, debounce the search
                 searchDebounce.playFromStart();
