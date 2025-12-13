@@ -31,7 +31,7 @@
         <top>
             <VBox spacing="10" styleClass="top-section">
                 <padding>
-                    <Insets top="15" right="15" bottom="15" left="15"/>
+                    <Insets top="20" right="20" bottom="20" left="20"/>
                 </padding>
                 
                 <!-- Search Section -->
@@ -50,7 +50,10 @@
                         <Button fx:id="removeRootButton" text="Remove Selected" onAction="#handleRemoveRoot" 
                                 styleClass="remove-root-button"/>
                     </HBox>
-                    <ListView fx:id="rootsList" prefHeight="100" styleClass="roots-list"/>
+                    <StackPane>
+                        <ListView fx:id="rootsList" prefHeight="100" styleClass="roots-list"/>
+                        <Label fx:id="rootsPlaceholderLabel" text="Select a root directory first" styleClass="stats-label" wrapText="true" alignment="CENTER" />
+                    </StackPane>
                 </VBox>
                 
                 <!-- Some useful info -->
@@ -101,7 +104,10 @@
                         <Insets top="10" right="10" bottom="10" left="10"/>
                     </padding>
                     
-                    <Label text="File Content:" styleClass="section-label"/>
+                    <VBox spacing="4" alignment="TOP_LEFT">
+                        <Label text="File Content:" styleClass="section-label"/>
+                        <Label fx:id="filePathLabel" text="" styleClass="stats-label" wrapText="true" />
+                    </VBox>
                     <StackPane VBox.vgrow="ALWAYS">
                         <TextArea fx:id="fileContentArea" editable="false" wrapText="true" 
                                       styleClass="file-content-area"/>

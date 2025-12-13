@@ -207,6 +207,29 @@
     -fx-background-color: white;
 }
 
+/* Ensure the File Content TextArea matches dark/night themes (overrides
+   the default white content background set above). This keeps the content
+   area visually consistent when no code is displayed. */
+.dark .file-content-area,
+.dark .text-area.file-content-area {
+    -fx-background-color: #2b2b2b;
+    -fx-control-inner-background: #2b2b2b;
+    -fx-text-fill: #eaeaea;
+}
+.dark .text-area .content {
+    -fx-background-color: #2b2b2b;
+}
+
+.night .file-content-area,
+.night .text-area.file-content-area {
+    -fx-background-color: #0f1113;
+    -fx-control-inner-background: #0f1113;
+    -fx-text-fill: #dcdcdc;
+}
+.night .text-area .content {
+    -fx-background-color: #0f1113;
+}
+
 /* Split Pane Styling */
 .split-pane {
     -fx-background-color: white;
@@ -313,6 +336,21 @@
 .night .open-folder-button {
     -fx-background-color: linear-gradient(#1f6fbf, #155a9a);
     -fx-text-fill: white;
+}
+
+/* SplitPane divider colors for dark/night themes (less bright than default) */
+.dark .split-pane-divider {
+    -fx-background-color: linear-gradient(#3a3a3a, #2b2b2b);
+}
+.dark .split-pane-divider:hover {
+    -fx-background-color: linear-gradient(#4a4a4a, #3a3a3a);
+}
+
+.night .split-pane-divider {
+    -fx-background-color: linear-gradient(#15171a, #0f1113);
+}
+.night .split-pane-divider:hover {
+    -fx-background-color: linear-gradient(#232630, #17181b);
 }
 
 /* Dark/Night search field overrides to ensure visibility */

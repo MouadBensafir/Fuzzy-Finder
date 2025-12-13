@@ -3,7 +3,7 @@ package org.example.fuzzy_app.service;
 import java.io.IOException;
 import java.nio.file.Path;
 
-public class FileService {
+public class FileOpenerService {
     private static final FileServiceStrategy strategy;
 
     static {

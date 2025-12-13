@@ -17,6 +17,7 @@ import java.util.Collections;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import javafx.event.ActionEvent;
+import javafx.beans.binding.Bindings;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.Window;
 
@@ -31,7 +32,7 @@ import java.util.concurrent.CompletableFuture;
 import javafx.animation.PauseTransition;
 import javafx.util.Duration;
 
-import org.example.fuzzy_app.service.FileService;
+import org.example.fuzzy_app.service.FileOpenerService;
 import org.example.fuzzy_app.service.FileContentService;
 import org.example.fuzzy_app.service.FileSearchService;
 import org.example.fuzzy_app.service.IndexService;
@@ -47,6 +48,9 @@ public class MainController implements Initializable {
     private ListView<String> rootsList;
 
     @FXML
+    private Label rootsPlaceholderLabel;
+
+    @FXML
     private Label statusLabel;
 
     @FXML
@@ -57,6 +61,9 @@ public class MainController implements Initializable {
 
     @FXML
     private TextArea fileContentArea;
+
+    @FXML
+    private Label filePathLabel;
 
     @FXML
     private CodeArea codeArea;
@@ -144,19 +151,9 @@ public class MainController implements Initializable {
             codeArea.getStylesheets().add(getClass().getResource("/org/example/fuzzy_app/style.css").toExternalForm());
         }
         
-            // Add C:\Users as default root on initialization (Windows)
-            try {
-                Path defaultRoot = Paths.get("C:", "Users");
-                if (Files.exists(defaultRoot) && Files.isDirectory(defaultRoot)) {
-                    String rootPathStr = defaultRoot.toString();
-                    if (rootsList != null && !rootsList.getItems().contains(rootPathStr)) {
-                        rootsList.getItems().add(rootPathStr);
-                        indexDirectory(defaultRoot);
-                        if (statusLabel != null) statusLabel.setText("Indexing default root: " + rootPathStr);
-                    }
-                }
-            } catch (Exception e) {
-                if (statusLabel != null) statusLabel.setText("Error adding default root: " + e.getMessage());
+            // Do not add a default root automatically; show placeholder when empty
+            if (rootsList != null && rootsPlaceholderLabel != null) {
+                rootsPlaceholderLabel.visibleProperty().bind(Bindings.isEmpty(rootsList.getItems()));
             }
     }
 
@@ -417,13 +414,16 @@ public class MainController implements Initializable {
         if (selectedPath == null) {
             fileContentArea.setText("");
             hideImageView();
+            if (filePathLabel != null) filePathLabel.setText("");
             return;
         }
         
         Path path = Paths.get(selectedPath);
+        if (filePathLabel != null) filePathLabel.setText(path.toString());
         if (!Files.exists(path)) {
             fileContentArea.setText("");
             hideImageView();
+            if (filePathLabel != null) filePathLabel.setText("");
             return;
         }
 
@@ -637,7 +637,7 @@ public class MainController implements Initializable {
         }
         
         try {
-            FileService.openFile(path);
+            FileOpenerService.openFile(path);
             statusLabel.setText("Opened file: " + path.getFileName());
         } catch (IOException e) {
             statusLabel.setText("Error opening file: " + e.getMessage());
@@ -665,7 +665,7 @@ public class MainController implements Initializable {
         }
 
         try {
-            FileService.openWithEditor(path, editor);
+            FileOpenerService.openWithEditor(path, editor);
             statusLabel.setText("Launched editor: " + (editor.isEmpty() ? "default" : editor));
         } catch (IOException e) {
             statusLabel.setText("Error launching editor: " + e.getMessage());
@@ -688,7 +688,7 @@ public class MainController implements Initializable {
         }
         
         try {
-            FileService.openFolder(folder);
+            FileOpenerService.openFolder(folder);
             statusLabel.setText("Opened folder: " + folder.toString());
         } catch (IOException e) {
             statusLabel.setText("Error opening folder: " + e.getMessage());

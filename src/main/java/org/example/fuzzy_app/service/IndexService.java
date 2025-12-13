@@ -68,7 +68,7 @@ public class IndexService {
         indexedRoots.add(root);
     }
     
-    // Removes a directory from the index.
+    // Removes a directory from the index
     public void removeDirectory(Path root) {
         indexedRoots.remove(root);
         filePaths.entrySet().removeIf(entry -> entry.getKey().startsWith(root));
