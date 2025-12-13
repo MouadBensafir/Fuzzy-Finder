@@ -3,6 +3,7 @@
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.image.ImageView?>
+<?import javafx.scene.image.Image?>
 <?import org.fxmisc.richtext.CodeArea?>
 <?import javafx.scene.layout.*?>
 
@@ -24,6 +25,18 @@
         <RadioButton fx:id="lightModeRadio" text="Light" toggleGroup="$themeToggleGroup" onAction="#handleThemeToggle"/>
         <RadioButton fx:id="darkModeRadio" text="Dark" toggleGroup="$themeToggleGroup" onAction="#handleThemeToggle" selected="true"/>
         <RadioButton fx:id="nightModeRadio" text="Night" toggleGroup="$themeToggleGroup" onAction="#handleThemeToggle"/>
+        
+        <!-- Spacer to push footer to bottom -->
+        <Region VBox.vgrow="ALWAYS" />
+
+        <!-- App logo and title (footer) -->
+        <HBox spacing="8" alignment="CENTER" style="-fx-padding:10 0 0 0;">
+            <ImageView fx:id="appLogo" fitWidth="45" fitHeight="36" preserveRatio="true" smooth="true" pickOnBounds="true">
+                <image>
+                    <Image url="@fzf_icon.png" />
+                </image>
+            </ImageView>
+        </HBox>
     </VBox>
 
     <!-- Right: content (top + center) -->
