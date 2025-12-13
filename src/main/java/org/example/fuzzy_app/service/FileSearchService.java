@@ -15,9 +15,10 @@ public class FileSearchService {
     
     private static final int MAX_RESULTS_WHEN_EMPTY = 50;
     
-    public static CompletableFuture<List<String>> searchAsync(
+        public static CompletableFuture<List<String>> searchAsync(
             List<String> indexedPaths,
             String query,
+            boolean caseSensitive,
             Consumer<List<String>> onComplete) {
         
         return CompletableFuture.<List<String>>supplyAsync(() -> {
@@ -34,7 +35,7 @@ public class FileSearchService {
             
             // Use FileSorter to get fuzzy matches on indexed paths
             String[] filesArray = indexedPaths.toArray(new String[0]);
-            return FileSorter.sortAllFiles(filesArray, query.trim(), true);
+            return FileSorter.sortAllFiles(filesArray, query.trim(), caseSensitive);
         }).thenApply((List<String> results) -> {
             if (onComplete != null) {
                 onComplete.accept(results);

@@ -212,22 +212,22 @@
    area visually consistent when no code is displayed. */
 .dark .file-content-area,
 .dark .text-area.file-content-area {
-    -fx-background-color: #2b2b2b;
-    -fx-control-inner-background: #2b2b2b;
+    -fx-background-color: #323437; /* slightly lighter than previous #2b2b2b */
+    -fx-control-inner-background: #323437;
     -fx-text-fill: #eaeaea;
 }
 .dark .text-area .content {
-    -fx-background-color: #2b2b2b;
+    -fx-background-color: #323437;
 }
 
 .night .file-content-area,
 .night .text-area.file-content-area {
-    -fx-background-color: #0f1113;
-    -fx-control-inner-background: #0f1113;
+    -fx-background-color: #15171a; /* slightly lighter than previous #0f1113 */
+    -fx-control-inner-background: #15171a;
     -fx-text-fill: #dcdcdc;
 }
 .night .text-area .content {
-    -fx-background-color: #0f1113;
+    -fx-background-color: #15171a;
 }
 
 /* Split Pane Styling */

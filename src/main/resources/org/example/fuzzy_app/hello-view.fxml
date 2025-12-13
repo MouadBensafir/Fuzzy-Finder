@@ -39,6 +39,7 @@
                     <Label text="Search:" styleClass="section-label"/>
                     <TextField fx:id="searchField" promptText="Type to search files and folders..." 
                                HBox.hgrow="ALWAYS" styleClass="search-field"/>
+                    <CheckBox fx:id="caseSensitiveCheck" text="Case sensitive" />
                 </HBox>
                 
                 <!-- Root Directory Section -->

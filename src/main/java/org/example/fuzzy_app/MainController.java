@@ -45,6 +45,9 @@ public class MainController implements Initializable {
     private TextField searchField;
 
     @FXML
+    private CheckBox caseSensitiveCheck;
+
+    @FXML
     private ListView<String> rootsList;
 
     @FXML
@@ -244,7 +247,8 @@ public class MainController implements Initializable {
         searchDebounce = new PauseTransition(Duration.millis(300));
         searchDebounce.setOnFinished(event -> {
             String query = searchField.getText();
-            performSearch(query);
+            boolean caseSensitive = caseSensitiveCheck != null && caseSensitiveCheck.isSelected();
+            performSearch(query, caseSensitive);
         });
         
         searchField.textProperty().addListener((observable, oldValue, newValue) -> {
@@ -260,6 +264,17 @@ public class MainController implements Initializable {
                 searchDebounce.playFromStart();
             }
         });
+
+        // If the case sensitivity checkbox changes, re-run current search
+        if (caseSensitiveCheck != null) {
+            caseSensitiveCheck.selectedProperty().addListener((obs, o, n) -> {
+                String query = searchField.getText();
+                if (query != null && !query.trim().isEmpty()) {
+                    boolean caseSensitive = n != null && n;
+                    performSearch(query, caseSensitive);
+                }
+            });
+        }
     }
 
     private void setupResultsSelectionListener() {
@@ -269,7 +284,7 @@ public class MainController implements Initializable {
         });
     }
 
-    private void performSearch(String query) {
+    private void performSearch(String query, boolean caseSensitive) {
         // Cancel previous search if still running
         if (currentSearchTask != null && !currentSearchTask.isDone()) {
             currentSearchTask.cancel(true);
@@ -289,6 +304,7 @@ public class MainController implements Initializable {
         currentSearchTask = FileSearchService.searchAsync(
             indexedPaths,
             query,
+            caseSensitive,
             results -> Platform.runLater(() -> {
                 if (results != null) {
                     resultsList.getItems().setAll(results);
@@ -382,7 +398,8 @@ public class MainController implements Initializable {
                     updateStatsAsync();
                     // Perform search if there's a query
                     if (searchField != null && !searchField.getText().isEmpty()) {
-                        performSearch(searchField.getText());
+                        boolean caseSensitive = caseSensitiveCheck != null && caseSensitiveCheck.isSelected();
+                        performSearch(searchField.getText(), caseSensitive);
                     }
                 });
             } catch (IOException e) {
@@ -403,7 +420,8 @@ public class MainController implements Initializable {
             updateStatsAsync();
             // Perform search if there's a query
             if (searchField != null && !searchField.getText().isEmpty()) {
-                performSearch(searchField.getText());
+                boolean caseSensitive = caseSensitiveCheck != null && caseSensitiveCheck.isSelected();
+                performSearch(searchField.getText(), caseSensitive);
             } else {
                 resultsList.getItems().clear();
             }
