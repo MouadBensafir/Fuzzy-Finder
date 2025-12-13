@@ -1,4 +1,6 @@
-package org.example.fuzzy_app.algorithm;
+package org.example.fuzzy_app.model.algorithm;
+
+import org.example.fuzzy_app.model.contants.Constants;
 
 public class Algorithm {
     private static char getPreparedPatternChar(String pattern, int index, boolean normalize, boolean caseSensitive) {

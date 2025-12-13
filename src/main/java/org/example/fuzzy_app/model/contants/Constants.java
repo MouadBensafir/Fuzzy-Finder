@@ -1,4 +1,4 @@
-package org.example.fuzzy_app.algorithm;
+package org.example.fuzzy_app.model.contants;
 
 public class Constants {
     public static final int CHAR_WHITE = 0;

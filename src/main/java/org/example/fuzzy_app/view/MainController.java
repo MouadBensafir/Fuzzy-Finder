@@ -1,4 +1,4 @@
-package org.example.fuzzy_app;
+package org.example.fuzzy_app.view;
 
 import javafx.application.Platform;
 import javafx.fxml.FXML;
@@ -32,10 +32,10 @@ import java.util.concurrent.CompletableFuture;
 import javafx.animation.PauseTransition;
 import javafx.util.Duration;
 
-import org.example.fuzzy_app.service.FileOpenerService;
-import org.example.fuzzy_app.service.FileContentService;
-import org.example.fuzzy_app.service.FileSearchService;
-import org.example.fuzzy_app.service.IndexService;
+import org.example.fuzzy_app.service.content_reading.FileContentService;
+import org.example.fuzzy_app.service.indexing.IndexService;
+import org.example.fuzzy_app.service.platform_opener.FileOpenerService;
+import org.example.fuzzy_app.service.search.FileSearchService;
 
 public class MainController implements Initializable {
     @FXML

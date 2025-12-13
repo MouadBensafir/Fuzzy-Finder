@@ -1,4 +1,4 @@
-package org.example.fuzzy_app.algorithm;
+package org.example.fuzzy_app.model.algorithm;
 
 import java.nio.charset.StandardCharsets;
 

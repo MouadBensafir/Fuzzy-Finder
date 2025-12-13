@@ -1,11 +1,11 @@
-package org.example.fuzzy_app.service;
-
-import org.example.fuzzy_app.algorithm.FileSorter;
+package org.example.fuzzy_app.service.search;
 
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
+
+import org.example.fuzzy_app.model.algorithm.FileSorter;
 
 
 // Service responsible for performing fuzzy file searches using the FileSorter algorithm

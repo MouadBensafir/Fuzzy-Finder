@@ -8,7 +8,7 @@
 <?import javafx.scene.layout.*?>
 
 <HBox xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml"
-      fx:controller="org.example.fuzzy_app.MainController"
+    fx:controller="org.example.fuzzy_app.view.MainController"
       fx:id="rootPane"
       stylesheets="@style.css">
 

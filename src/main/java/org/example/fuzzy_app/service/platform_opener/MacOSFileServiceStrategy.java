@@ -1,4 +1,4 @@
-package org.example.fuzzy_app.service;
+package org.example.fuzzy_app.service.platform_opener;
 
 import java.io.IOException;
 import java.nio.file.Path;
