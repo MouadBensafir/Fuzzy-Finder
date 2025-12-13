@@ -19,7 +19,7 @@ public class Algo implements ScoringStrategy {
         };
 
         String query = "M";
-        List<String> results = FileSorter.sortAllFiles(myFiles, query, true);
+        List<String> results = FileSorter.sortAllFiles(myFiles, query, false);
         results.forEach(System.out::println);
     }
 

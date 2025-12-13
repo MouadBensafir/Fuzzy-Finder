@@ -34,7 +34,7 @@ public class FileSearchService {
             
             // Use FileSorter to get fuzzy matches on indexed paths
             String[] filesArray = indexedPaths.toArray(new String[0]);
-            return FileSorter.sortAllFiles(filesArray, query.trim());
+            return FileSorter.sortAllFiles(filesArray, query.trim(), true);
         }).thenApply((List<String> results) -> {
             if (onComplete != null) {
                 onComplete.accept(results);
