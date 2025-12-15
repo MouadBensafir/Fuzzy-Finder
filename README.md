@@ -3,6 +3,7 @@
 ![Java](https://img.shields.io/badge/Java-17%2B-ED8B00?style=for-the-badge&logo=java&logoColor=white)
 ![JavaFX](https://img.shields.io/badge/JavaFX-Native%20UI-blue?style=for-the-badge)
 ![Performance](https://img.shields.io/badge/Performance-Zero%20Allocation-brightgreen?style=for-the-badge)
+
 A **blazing fast**, zero-allocation fuzzy search engine for Java, strictly ported from the core of `fzf`.
 
 Designed to bridge the gap between **High-Performance Backend** and **Rich Frontend**. It filters 100,000+ files in real-time and renders selected files with **VS Code-style Syntax Highlighting** inside a fully themable UI.
