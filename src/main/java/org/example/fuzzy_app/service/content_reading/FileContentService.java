@@ -25,7 +25,7 @@ public class FileContentService {
     private static final String[] BINARY_EXTENSIONS = {
         ".exe", ".dll", ".so", ".dylib", ".bin", ".class", ".jar", ".war",
         ".zip", ".rar", ".7z", ".tar", ".gz", ".bz2", ".xz",
-        ".svg", // SVG is treated as binary/text, not image
+        ".svg", // SVG is treated as binary, not image
         ".mp3", ".mp4", ".avi", ".mov", ".wmv", ".flv", ".mkv",
         ".doc", ".docx", ".xls", ".xlsx", ".ppt", ".pptx",
         ".db", ".sqlite", ".mdb"
@@ -96,11 +96,7 @@ public class FileContentService {
         }
     }
 
-    public static void readFileContentAsync(
-            Path path,
-            Consumer<String> onSuccess,
-            Consumer<String> onError,
-            Consumer<String> onBinary) {
+    public static void readFileContentAsync(Path path, Consumer<String> onSuccess, Consumer<String> onError, Consumer<String> onBinary) {
         
         CompletableFuture.runAsync(() -> {
             try {
@@ -145,10 +141,7 @@ public class FileContentService {
     }
     
     // Loads an image file asynchronously
-    public static void loadImageAsync(
-            Path path,
-            Consumer<Image> onSuccess,
-            Consumer<String> onError) {
+    public static void loadImageAsync(Path path, Consumer<Image> onSuccess, Consumer<String> onError) {
         
         CompletableFuture.runAsync(() -> {
             try {
